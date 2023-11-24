@@ -4,18 +4,17 @@
   "description": "Keeping track of your income and expenses",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "node server.js",
+    "server": "nodemon server.js"
   },
-  "author": "Rakib Mahmud Mridha",
+  "author": "I-Novotek Academy",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "express": "^4.18.2",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.0.1"
+    "express": "^4.18.1",
+    "mongoose": "^6.5.3"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "nodemon": "^2.0.19"
   }
 }

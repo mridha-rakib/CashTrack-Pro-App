@@ -1,4 +1,5 @@
 const express = require("express");
+const isLogin = require("../../middlewares/isLogin");
 const {
   createAccountCtrl,
   deleteAccountCtrl,
@@ -10,7 +11,7 @@ const {
 const accountRoute = express.Router();
 
 //POST/api/v1/accounts
-accountRoute.post("/", createAccountCtrl);
+accountRoute.post("/", isLogin, createAccountCtrl);
 
 //GET/api/v1/accounts/:id
 accountRoute.get("/:id", getAccountCtrl);
