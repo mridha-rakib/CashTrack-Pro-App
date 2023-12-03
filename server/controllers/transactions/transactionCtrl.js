@@ -1,9 +1,41 @@
+const Account = require("../../model/Account");
+const User = require("../../model/User");
+const Transaction = require("../../model/Transaction");
+const { AppErr } = require("../../utils/appErr");
+
 //create
-const createTransactionCtrl = async (req, res) => {
+const createTransactionCtrl = async (req, res, next) => {
+  const { name, transactionType, amount, category, notes, account } = req.body;
   try {
-    res.json({ msg: "create route" });
+    const userFound = await User.findById(req.user);
+    if (!userFound) {
+      next(new AppErr("user not found", 404));
+    }
+
+    const accountFound = await Account.findById(account);
+    if (!accountFound) {
+      return next(new AppErr("Account not found", 404));
+    }
+
+    const transaction = await Transaction.create({
+      name,
+      transactionType,
+      amount,
+      category,
+      notes,
+      account,
+      createdBy: req.user,
+    });
+
+    accountFound.transactions.push(transaction._id);
+    await accountFound.save();
+
+    res.json({
+      status: "scuccess",
+      data: transaction,
+    });
   } catch (error) {
-    res.json(error);
+    next(error);
   }
 };
 

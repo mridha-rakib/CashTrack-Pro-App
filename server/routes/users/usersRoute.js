@@ -19,9 +19,10 @@ usersRoute.post("/login", userLoginCtrl);
 //GET/api/v1/users/profile/:id
 usersRoute.get("/profile", isLogin, userProfileCtrl);
 
+//PUT/api/v1/users/:id
+usersRoute.put("/", isLogin, updateUserCtrl);
+
 //DELETE/api/v1/users/:id
 usersRoute.delete("/:id", deleteUserCtrl);
 
-//PUT/api/v1/users/:id
-usersRoute.put("/:id", updateUserCtrl);
 module.exports = usersRoute;

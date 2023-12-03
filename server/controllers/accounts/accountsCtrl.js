@@ -32,7 +32,8 @@ const createAccountCtrl = async (req, res, next) => {
 //all
 const getAccountsCtrl = async (req, res) => {
   try {
-    res.json({ msg: "get account route" });
+    const accounts = await Account.find().populate("transactions");
+    res.json({ data: accounts });
   } catch (error) {
     res.json(error);
   }

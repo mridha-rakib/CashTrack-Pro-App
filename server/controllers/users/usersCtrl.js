@@ -4,7 +4,6 @@ const bcrypt = require("bcryptjs");
 const User = require("../../model/User");
 const { AppErr, appErr } = require("../../utils/appErr");
 const generateToken = require("../../utils/generateToken");
-const verifyToken = require("../../utils/verifyToken");
 
 //Register
 const registerUserCtrl = async (req, res, next) => {
@@ -35,7 +34,7 @@ const registerUserCtrl = async (req, res, next) => {
       id: user._id,
     });
   } catch (error) {
-    next(new Error(error));
+    next(new AppErr(error.message));
   }
 };
 
@@ -60,39 +59,72 @@ const userLoginCtrl = async (req, res, next) => {
       token: generateToken(userFound._id),
     });
   } catch (error) {
-    next(error);
+    next(new AppErr(error.message));
   }
 };
 
 //profile
 const userProfileCtrl = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user);
+    const user = await User.findById(req.user).populate({
+      path: "accounts",
+      populate: {
+        path: "transactions",
+        model: "Transaction",
+      },
+    });
     res.status(200).json({
       user,
     });
   } catch (error) {
-    res.json({
-      error: error.message,
-    });
+    next(new AppErr(error.message));
   }
 };
 
 //delete
-const deleteUserCtrl = async (req, res) => {
+const deleteUserCtrl = async (req, res, next) => {
   try {
-    res.json({ msg: "delete route" });
+    await User.findByIdAndDelete(req.user);
+    res.status(200).json({
+      status: "success",
+      data: null,
+    });
   } catch (error) {
-    res.json(error);
+    next(new AppErr(error.message));
   }
 };
 
 //update
-const updateUserCtrl = async (req, res) => {
+const updateUserCtrl = async (req, res, next) => {
   try {
-    res.json({ msg: "update route" });
+    if (req.body.email) {
+      const userFound = await User.findOne({ email: req.body.email });
+      if (userFound) {
+        return next(new AppErr("Email is already exist", 400));
+      }
+    }
+
+    const password = req.body.password;
+    const hashedPassword = await bcrypt.hash(password, 10); // await the hash function
+
+    const user = await User.findByIdAndUpdate(
+      { _id: req.user },
+      {
+        ...req.body,
+        password: hashedPassword,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    res.status(200).json({
+      status: "Success",
+      data: user,
+    });
   } catch (error) {
-    res.json(error);
+    next(new AppErr(error.message));
   }
 };
 
