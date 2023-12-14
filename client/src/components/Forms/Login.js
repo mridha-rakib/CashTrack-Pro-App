@@ -29,7 +29,7 @@ const Register = () => {
           <div className="max-w-sm mx-auto">
             <div className="mb-6 text-center">
               <h3 className="mb-4 text-2xl md:text-3xl font-bold">
-                Register for an account
+                Sign in to your account
               </h3>
             </div>
             <form onSubmit={onSubmitHandler}>
@@ -46,7 +46,7 @@ const Register = () => {
                   name="email"
                   className="appearance-none block w-full p-3 leading-5 text-coolGray-900 border border-coolGray-200 rounded-lg shadow-sm placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
                   type="email"
-                  placeholder="i-novotek@gmail.com"
+                  placeholder="expensestracker@gmail.com"
                 />
               </div>
               <div className="mb-4">
@@ -74,7 +74,7 @@ const Register = () => {
               </button>
               <p className="text-center">
                 <span className="text-xs font-medium">
-                  Already have an account? <Link to="/login">Sign in</Link>
+                  Don't have an account? <Link to="/register">Sign up</Link>
                 </span>
               </p>
             </form>

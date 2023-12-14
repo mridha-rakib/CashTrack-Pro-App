@@ -1,6 +1,7 @@
 import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { PlusIcon } from "@heroicons/react/20/solid";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   return (
@@ -25,50 +26,50 @@ export default function Navbar() {
                   <img
                     className="block h-8 w-auto lg:hidden"
                     src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Your Company"
+                    alt="../../assets/Income.png"
                   />
                   <img
                     className="hidden h-8 w-auto lg:block"
                     src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                    alt="Your Company"
+                    alt="../../assets/Income.png"
                   />
                 </div>
                 <div className="hidden md:ml-6 md:flex md:items-center md:space-x-4">
-                  <a
+                  <Link
                     to="/"
                     className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >
                     Home
-                  </a>
+                  </Link>
 
                   <>
-                    <a
-                      href="/add-transaction"
+                    <Link
+                      to="/add-transaction"
                       className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                     >
                       Add Transaction
-                    </a>
-                    <a
-                      href="/dashboard"
+                    </Link>
+                    <Link
+                      to="/dashboard"
                       className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                     >
                       Dashboard
-                    </a>
+                    </Link>
                   </>
 
                   <>
-                    <a
-                      href="/login"
+                    <Link
+                      to="/login"
                       className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                     >
                       Login
-                    </a>
-                    <a
-                      href="/register"
+                    </Link>
+                    <Link
+                      to="/register"
                       className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                     >
                       Register
-                    </a>
+                    </Link>
                   </>
 
                   <>
@@ -80,8 +81,8 @@ export default function Navbar() {
               </div>
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <a
-                    href="/dashboard"
+                  <Link
+                    to="/dashboard"
                     className="relative inline-flex items-center rounded-md border border-transparent bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
                   >
                     <PlusIcon
@@ -89,7 +90,7 @@ export default function Navbar() {
                       aria-hidden="true"
                     />
                     <span>New Transaction</span>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -98,33 +99,33 @@ export default function Navbar() {
           {/* Mobile */}
           <Disclosure.Panel className="md:hidden">
             <div className="space-y-1 px-2 pt-2 pb-3 sm:px-3">
-              <a
-                href="/"
+              <Link
+                to="/"
                 className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
               >
                 Home
-              </a>
+              </Link>
 
-              <a
-                href="/dashboard"
+              <Link
+                to="/dashboard"
                 className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
               >
                 Dashboard
-              </a>
+              </Link>
 
               <>
-                <a
-                  href="/login"
+                <Link
+                  to="/login"
                   className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                 >
                   Login
-                </a>
-                <a
-                  href="/register"
+                </Link>
+                <Link
+                  to="/register"
                   className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                 >
                   Register
-                </a>
+                </Link>
               </>
 
               <button className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">
