@@ -14,14 +14,14 @@ const accountRoute = express.Router();
 accountRoute.post("/", isLogin, createAccountCtrl);
 
 //GET/api/v1/accounts/:id
-accountRoute.get("/:id", getAccountCtrl);
+accountRoute.get("/:id", isLogin, getAccountCtrl);
 
 //DELETE/api/v1/accounts/:id
-accountRoute.delete("/:id", deleteAccountCtrl);
+accountRoute.delete("/:id", isLogin, deleteAccountCtrl);
 
 //PUT/api/v1/accounts/:id
-accountRoute.put("/:id", updateAccountCtrl);
+accountRoute.put("/:id", isLogin, updateAccountCtrl);
 
 //GET/api/v1/accounts
-accountRoute.get("/", getAccountsCtrl);
+accountRoute.get("/", isLogin, getAccountsCtrl);
 module.exports = accountRoute;

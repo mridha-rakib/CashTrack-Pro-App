@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
 
+//user schema
+
 const accountSchema = new mongoose.Schema(
   {
-    name: {
+    title: {
       type: String,
       required: true,
     },
@@ -24,6 +26,7 @@ const accountSchema = new mongoose.Schema(
         "Loan",
         "Cash Flow",
         "Uncategorized",
+        "Education",
       ],
       required: true,
     },

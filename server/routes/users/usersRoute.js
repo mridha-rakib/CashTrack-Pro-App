@@ -11,7 +11,6 @@ const isLogin = require("../../middlewares/isLogin");
 const usersRoute = express.Router();
 
 //POST/api/v1/users/register
-
 usersRoute.post("/register", registerUserCtrl);
 //POST/api/v1/users/login
 usersRoute.post("/login", userLoginCtrl);
@@ -23,6 +22,6 @@ usersRoute.get("/profile", isLogin, userProfileCtrl);
 usersRoute.put("/", isLogin, updateUserCtrl);
 
 //DELETE/api/v1/users/:id
-usersRoute.delete("/:id", deleteUserCtrl);
+usersRoute.delete("/:id", isLogin, deleteUserCtrl);
 
 module.exports = usersRoute;

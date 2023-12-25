@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 require("./config/dbConnect");
 const accountRoute = require("./routes/accounts/accountRoute");
 const transactionsRoute = require("./routes/transactions/transactionsRoute");
@@ -11,6 +12,7 @@ const app = express();
 
 //middlewares
 app.use(express.json()); //pass incoming data
+app.use(cors());
 //users route
 app.use("/api/v1/users", usersRoute);
 //account routes

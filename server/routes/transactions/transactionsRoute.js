@@ -14,15 +14,15 @@ const transactionsRoute = express.Router();
 transactionsRoute.post("/", isLogin, createTransactionCtrl);
 
 //GET/api/v1/transactions
-transactionsRoute.get("/", getTransactionsCtrl);
+transactionsRoute.get("/all", isLogin, getTransactionsCtrl);
 
 //GET/api/v1/transactions/:id
 transactionsRoute.get("/:id", getTransactionCtrl);
 
 //DELETE/api/v1/transactions/:id
-transactionsRoute.delete("/:id", getTransactionCtrl);
+transactionsRoute.delete("/:id", isLogin, getTransactionCtrl);
 
 //PUT/api/v1/transactions/:id
-transactionsRoute.put("/:id", updateTransactionCtrl);
+transactionsRoute.put("/:id", isLogin, updateTransactionCtrl);
 
 module.exports = transactionsRoute;

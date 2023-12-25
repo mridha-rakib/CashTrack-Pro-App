@@ -4,21 +4,22 @@ const { AppErr } = require("../../utils/appErr");
 
 //create
 const createAccountCtrl = async (req, res, next) => {
-  const { name, accountType, initialBalance, notes } = req.body;
-  console.log(req.body);
+  const { title, initialBalance, accountType, notes } = req.body;
   try {
+    //1. Find the logged in user
     const userFound = await User.findById(req.user);
-    if (!userFound) return next(new AppErr("user not found", 404));
-
+    if (!userFound) return next(new AppErr("User not found", 404));
+    //2. Create the account
     const account = await Account.create({
-      name,
+      title,
       initialBalance,
       accountType,
       notes,
       createdBy: req.user,
     });
-
+    //3push the account into users accounts field
     userFound.accounts.push(account._id);
+    //4. re-save the user
     await userFound.save();
     res.json({
       status: "success",
@@ -33,36 +34,55 @@ const createAccountCtrl = async (req, res, next) => {
 const getAccountsCtrl = async (req, res) => {
   try {
     const accounts = await Account.find().populate("transactions");
-    res.json({ data: accounts });
+    res.json(accounts);
   } catch (error) {
     res.json(error);
   }
 };
 
 //single
-const getAccountCtrl = async (req, res) => {
+const getAccountCtrl = async (req, res, next) => {
   try {
-    res.json({ msg: "get account route" });
+    //find the id from params
+    const { id } = req.params;
+    const account = await Account.findById(id).populate("transactions");
+    res.json({
+      status: "success",
+      data: account,
+    });
   } catch (error) {
-    res.json(error);
+    next(new AppErr(error.message, 500));
   }
 };
 
 //delete
-const deleteAccountCtrl = async (req, res) => {
+const deleteAccountCtrl = async (req, res, next) => {
   try {
-    res.json({ msg: "delete route" });
+    const { id } = req.params;
+    await Account.findByIdAndDelete(id);
+    res.status(200).json({
+      status: "success",
+      data: null,
+    });
   } catch (error) {
-    res.json(error);
+    next(new AppErr(error.message, 500));
   }
 };
 
 //update
 const updateAccountCtrl = async (req, res) => {
   try {
-    res.json({ msg: "update route" });
+    const { id } = req.params;
+    const account = await Account.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    res.json({
+      status: "success",
+      data: account,
+    });
   } catch (error) {
-    res.json(error);
+    next(new AppErr(error.message, 500));
   }
 };
 

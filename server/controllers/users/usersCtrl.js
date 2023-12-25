@@ -1,6 +1,4 @@
 const bcrypt = require("bcryptjs");
-
-// Internal imports
 const User = require("../../model/User");
 const { AppErr, appErr } = require("../../utils/appErr");
 const generateToken = require("../../utils/generateToken");
@@ -12,10 +10,8 @@ const registerUserCtrl = async (req, res, next) => {
     //check if email exist
     const userFound = await User.findOne({ email });
     if (userFound) {
-      next(new AppErr("User Already Exist", 400));
+      return next(appErr("User Already Exist", 400));
     }
-
-    //check if fields are empty
 
     //hash password
     const salt = await bcrypt.genSalt(10);
@@ -34,7 +30,7 @@ const registerUserCtrl = async (req, res, next) => {
       id: user._id,
     });
   } catch (error) {
-    next(new AppErr(error.message));
+    next(new AppErr(error.message, 500));
   }
 };
 
@@ -42,15 +38,14 @@ const registerUserCtrl = async (req, res, next) => {
 const userLoginCtrl = async (req, res, next) => {
   const { email, password } = req.body;
   try {
+    //check if email exist
     const userFound = await User.findOne({ email });
-    if (!userFound) {
-      return next(new AppErr("Invalid login credentials", 400));
-    }
+    if (!userFound) return next(new AppErr("Invalid login credentials", 400));
 
+    //check for password validity
     const isPasswordMatch = await bcrypt.compare(password, userFound.password);
-    if (!isPasswordMatch) {
+    if (!isPasswordMatch)
       return next(new AppErr("Invalid login credentials", 400));
-    }
 
     res.json({
       status: "success",
@@ -59,12 +54,12 @@ const userLoginCtrl = async (req, res, next) => {
       token: generateToken(userFound._id),
     });
   } catch (error) {
-    next(new AppErr(error.message));
+    next(new AppErr(error.message, 500));
   }
 };
 
 //profile
-const userProfileCtrl = async (req, res, next) => {
+const userProfileCtrl = async (req, res) => {
   try {
     const user = await User.findById(req.user).populate({
       path: "accounts",
@@ -73,11 +68,10 @@ const userProfileCtrl = async (req, res, next) => {
         model: "Transaction",
       },
     });
-    res.status(200).json({
-      user,
-    });
+    res.json(user);
   } catch (error) {
-    next(new AppErr(error.message));
+    console.log(new AppErr(error.message, 500));
+    next(new AppErr(error.message, 500));
   }
 };
 
@@ -89,47 +83,62 @@ const deleteUserCtrl = async (req, res, next) => {
       status: "success",
       data: null,
     });
+    res.json({ msg: "delete route" });
   } catch (error) {
-    next(new AppErr(error.message));
+    next(new AppErr(error.message, 500));
   }
 };
 
 //update
 const updateUserCtrl = async (req, res, next) => {
   try {
+    //Check if email exist
     if (req.body.email) {
       const userFound = await User.findOne({ email: req.body.email });
-      if (userFound) {
-        return next(new AppErr("Email is already exist", 400));
-      }
+      if (userFound)
+        return next(
+          new AppErr("Email is taken or you already have this email", 400)
+        );
     }
 
-    const password = req.body.password;
-    const hashedPassword = await bcrypt.hash(password, 10); // await the hash function
-
-    const user = await User.findByIdAndUpdate(
-      { _id: req.user },
-      {
-        ...req.body,
-        password: hashedPassword,
-      },
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
-
+    //Check if user is updating the password
+    if (req.body.password) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(req.body.password, salt);
+      //update the user
+      const user = await User.findByIdAndUpdate(
+        req.user,
+        {
+          password: hashedPassword,
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+      //send the response
+      return res.status(200).json({
+        status: "success",
+        data: user,
+      });
+    }
+    const user = await User.findByIdAndUpdate(req.user, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    //send the response
     res.status(200).json({
-      status: "Success",
+      status: "success",
       data: user,
     });
   } catch (error) {
-    next(new AppErr(error.message));
+    next(new AppErr(error.message, 500));
   }
 };
 
 module.exports = {
   registerUserCtrl,
+  userLoginCtrl,
   userLoginCtrl,
   userProfileCtrl,
   deleteUserCtrl,

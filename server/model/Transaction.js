@@ -3,9 +3,8 @@ const mongoose = require("mongoose");
 //user schema
 const transactionSchema = new mongoose.Schema(
   {
-    name: {
+    title: {
       type: String,
-      required: true,
     },
     transactionType: {
       type: String,
@@ -32,8 +31,8 @@ const transactionSchema = new mongoose.Schema(
         "Personal",
         "Groceries",
         "Bills",
-        "Building",
         "Uncategorized",
+        "Building",
       ],
       required: true,
     },
@@ -45,6 +44,7 @@ const transactionSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+
     date: {
       type: Date,
       default: Date.now(),

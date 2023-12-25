@@ -4,8 +4,24 @@ import { authContext } from "../context/AuthContext/AuthContext";
 
 const Login = () => {
   const { loginUserAction } = useContext(authContext);
-  const [email, setEmil] = useState("");
-  const [password, setPassword] = useState("");
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const { email, password } = formData;
+
+  // onChange
+  const onChangeInput = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // submit
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    loginUserAction(formData);
+  };
 
   return (
     <>
@@ -17,41 +33,53 @@ const Login = () => {
                 Sign in to your account
               </h3>
             </div>
-            <form>
+            <form onSubmit={onSubmitHandler}>
               <div className="mb-6">
                 <label
                   className="block mb-2 text-coolGray-800 font-medium"
-                  htmlFor
+                  htmlFor="email"
                 >
                   Email
                 </label>
                 <input
+                  value={email}
+                  onChange={onChangeInput}
                   name="email"
                   className="appearance-none block w-full p-3 leading-5 text-coolGray-900 border border-coolGray-200 rounded-lg shadow-sm placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-                  type="email"
                   placeholder="expensestracker@gmail.com"
                 />
               </div>
               <div className="mb-4">
                 <label
                   className="block mb-2 text-coolGray-800 font-medium"
-                  htmlFor
+                  htmlFor="password"
                 >
                   Password
                 </label>
                 <input
+                  value={password}
+                  onChange={onChangeInput}
                   name="password"
                   className="appearance-none block w-full p-3 leading-5 text-coolGray-900 border border-coolGray-200 rounded-lg shadow-sm placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
                   type="password"
                   placeholder="************"
                 />
               </div>
-              <div className="flex flex-wrap items-center justify-between mb-6"></div>
+              <div className="flex flex-wrap items-center justify-between mb-6">
+                <div className="w-full md:w-1/2">
+                  <label className="relative inline-flex items-center">
+                    <input
+                      type="checkbox"
+                      className="form-checkbox appearance-none"
+                    />
+                  </label>
+                </div>
+              </div>
               <button
                 className="inline-block py-3 px-7 mb-6 w-full text-base text-green-50 font-medium text-center leading-6 bg-green-500 hover:bg-green-600 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 rounded-md shadow-sm"
                 type="submit"
               >
-                Register
+                Sign In
               </button>
               <p className="text-center">
                 <span className="text-xs font-medium">
