@@ -5,7 +5,7 @@ const { AppErr } = require("../../utils/appErr");
 
 //create
 const createTransactionCtrl = async (req, res, next) => {
-  const { title, transactionType, amount, category, notes, account } = req.body;
+  const { name, transactionType, amount, category, notes, account } = req.body;
   try {
     //1. Find user
     const userFound = await User.findById(req.user);
@@ -18,7 +18,7 @@ const createTransactionCtrl = async (req, res, next) => {
     //3. Create the transaction
 
     const transaction = await Transaction.create({
-      title,
+      name,
       transactionType,
       amount,
       category,

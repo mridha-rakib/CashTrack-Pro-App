@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { accountContext } from "../context/AccountContext/AccountContext";
 
 export default function AddAccount() {
-  const { createAccountAction, error } = useContext(accountContext);
+  const { createAccountAction } = useContext(accountContext);
   const [formData, setFormData] = useState({
     name: "",
     accountType: "",
@@ -11,12 +11,12 @@ export default function AddAccount() {
   });
 
   //handle form change
-  const handleChange = e => {
+  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   //handle form submit
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     createAccountAction(formData);
   };
@@ -78,7 +78,7 @@ export default function AddAccount() {
                   <option value="Checking">Checking</option>
                   <option value="Credit Card">Credit Card</option>
                   <option value="Utilities">Utilities</option>
-                  <option value="Builing">Builing</option>
+                  <option value="Building">Building</option>
                   <option value="Travel">Travel</option>
                   <option value="Education">Education</option>
                   <option value="Personal">Personal</option>

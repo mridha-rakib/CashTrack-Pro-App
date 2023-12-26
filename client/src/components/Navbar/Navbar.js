@@ -49,7 +49,7 @@ export default function Navbar() {
                   {token && (
                     <>
                       <Link
-                        to="/add-transaction"
+                        to="/add-transaction/${accountID}/"
                         className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                       >
                         Add Transaction

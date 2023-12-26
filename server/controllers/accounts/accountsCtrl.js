@@ -4,14 +4,14 @@ const { AppErr } = require("../../utils/appErr");
 
 //create
 const createAccountCtrl = async (req, res, next) => {
-  const { title, initialBalance, accountType, notes } = req.body;
+  const { name, initialBalance, accountType, notes } = req.body;
   try {
     //1. Find the logged in user
     const userFound = await User.findById(req.user);
     if (!userFound) return next(new AppErr("User not found", 404));
     //2. Create the account
     const account = await Account.create({
-      title,
+      name,
       initialBalance,
       accountType,
       notes,
@@ -26,7 +26,7 @@ const createAccountCtrl = async (req, res, next) => {
       data: account,
     });
   } catch (error) {
-    next(error);
+    next(new AppErr(error.message, 500));
   }
 };
 
@@ -36,7 +36,7 @@ const getAccountsCtrl = async (req, res) => {
     const accounts = await Account.find().populate("transactions");
     res.json(accounts);
   } catch (error) {
-    res.json(error);
+    next(new AppErr(error.message, 500));
   }
 };
 

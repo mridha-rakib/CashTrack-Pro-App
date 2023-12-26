@@ -75,7 +75,7 @@ const AllTransactions = ({ transactions, accountID }) => {
                             <div className="flex items-center">
                               <div className="ml-4">
                                 <div className="font-medium text-gray-900">
-                                  {transaction?.title}
+                                  {transaction?.name}
                                 </div>
                                 {/* <div className="text-gray-500">Emma</div> */}
                               </div>

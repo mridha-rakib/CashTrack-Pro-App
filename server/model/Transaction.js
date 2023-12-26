@@ -3,8 +3,9 @@ const mongoose = require("mongoose");
 //user schema
 const transactionSchema = new mongoose.Schema(
   {
-    title: {
+    name: {
       type: String,
+      required: true,
     },
     transactionType: {
       type: String,

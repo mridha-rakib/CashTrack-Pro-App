@@ -2,11 +2,10 @@ import React, { createContext, useReducer } from "react";
 import axios from "axios";
 import {
   TRANSACTION_CREATION_STARTED,
-  TRANSACTION_CREATION_SUCCES,
+  TRANSACTION_CREATION_SUCCESS,
   TRANSACTION_CREATION_FAIL,
 } from "./transactionsActionTypes";
 import { API_URL_TRANSACTION } from "../../../utils/apiURL";
-
 export const transactionContext = createContext();
 
 const INITIAL_STATE = {
@@ -19,7 +18,7 @@ const INITIAL_STATE = {
 const transactionReducer = (state, action) => {
   const { type, payload } = action;
   switch (type) {
-    case TRANSACTION_CREATION_SUCCES:
+    case TRANSACTION_CREATION_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -40,7 +39,7 @@ export const TransactionContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(transactionReducer, INITIAL_STATE);
 
   //create account
-  const createTransactionAction = async accountData => {
+  const createTransactionAction = async (accountData) => {
     try {
       //header
       const config = {
@@ -49,11 +48,12 @@ export const TransactionContextProvider = ({ children }) => {
           Authorization: `Bearer ${state?.token?.token}`,
         },
       };
+      console.log(state);
       //request
       const res = await axios.post(API_URL_TRANSACTION, accountData, config);
       console.log(res);
       if (res?.data?.status === "success") {
-        dispatch({ type: TRANSACTION_CREATION_SUCCES, payload: res?.data });
+        dispatch({ type: TRANSACTION_CREATION_SUCCESS, payload: res?.data });
       }
     } catch (error) {
       dispatch({

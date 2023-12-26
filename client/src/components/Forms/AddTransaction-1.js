@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useParams } from "react-router-dom";
+import { transactionContext } from "../context/TransactionContext/TransactionsContext";
 
 export default function AddTransaction() {
+  const { id } = useParams();
+  const { createTransactionAction, error } = useContext(transactionContext);
   const [formData, setFormData] = useState({
     name: "",
     transactionType: "",
@@ -18,7 +22,7 @@ export default function AddTransaction() {
   //handle form submit
   const handleSubmit = (e) => {
     e.preventDefault();
-    createTransactionAction({ account: accountID, ...formData });
+    createTransactionAction({ account: id, ...formData });
   };
 
   return (
@@ -58,7 +62,7 @@ export default function AddTransaction() {
                   className="mt-1 block w-full border-2 rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                 >
                   <option value="Income">Income (+)</option>
-                  <option value="Expense">Expense (-)</option>
+                  <option value="Expenses">Expense (-)</option>
                 </select>
               </div>
               <div>

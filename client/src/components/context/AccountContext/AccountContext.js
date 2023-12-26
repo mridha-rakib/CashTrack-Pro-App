@@ -1,7 +1,7 @@
 import axios from "axios";
 import { createContext, useReducer } from "react";
 import { API_URL_ACC } from "../../../utils/apiURL";
-import { API_URL_USER } from "../../../utils/apiURL";
+
 import {
   ACCOUNT_DETAILS_SUCCESS,
   ACCOUNT_DETAILS_FAIL,
@@ -91,36 +91,39 @@ export const AccountContextProvider = ({ children }) => {
   };
 
   //Get account Details action
-  // const createAccountAction = async (formData) => {
-  //   console.log(state?.userAuth);
-  //   const config = {
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${state?.userAuth?.token}`,
-  //     },
-  //   };
-  //   try {
-  //     const res = await axios.post(`${API_URL_ACC}`, formData, config);
-  //     if (res?.data?.status === "success") {
-  //       //dispatch
-  //       dispatch({
-  //         type: ACCOUNT_CREATION_SUCCESS,
-  //         payload: res?.data?.data,
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     dispatch({
-  //       type: ACCOUNT_CREATION_FAIL,
-  //       payload: error?.data?.response?.message,
-  //     });
-  //   }
-  // };
+  const createAccountAction = async (formData) => {
+    console.log(formData);
+    console.log(state?.userAuth?.token);
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${state?.userAuth?.token}`,
+      },
+    };
+    try {
+      const res = await axios.post(`${API_URL_ACC}`, formData, config);
+
+      if (res?.data?.status === "success") {
+        //dispatch
+        dispatch({
+          type: ACCOUNT_CREATION_SUCCESS,
+          payload: res?.data?.data,
+        });
+      }
+    } catch (error) {
+      console.log(error.message);
+      dispatch({
+        type: ACCOUNT_CREATION_FAIL,
+        payload: error?.data?.response?.message,
+      });
+    }
+  };
   return (
     <accountContext.Provider
       value={{
         getAccountDetailsAction,
         account: state?.account,
+        createAccountAction,
         error: state?.error,
       }}
     >

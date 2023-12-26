@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 const accountSchema = new mongoose.Schema(
   {
-    title: {
+    name: {
       type: String,
       required: true,
     },
@@ -15,7 +15,7 @@ const accountSchema = new mongoose.Schema(
         "Investment",
         "Checking",
         "Credit Card",
-        "Builing",
+        "Building",
         "School",
         "Project",
         "Utilities",

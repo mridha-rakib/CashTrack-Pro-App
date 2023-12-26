@@ -25,7 +25,24 @@ const INITIAL_STATE = {
 const reducer = (state, action) => {
   const { type, payload } = action;
   switch (type) {
+    //Register
+    case REGISTER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        userAuth: payload,
+      };
+    case REGISTER_FAIL:
+      return {
+        ...state,
+        error: payload,
+        loading: false,
+        userAuth: null,
+      };
+
     case LOGIN_SUCCESS:
+      //Add user to localstorage
       localStorage.setItem("userAuth", JSON.stringify(payload));
       return {
         ...state,
@@ -40,6 +57,7 @@ const reducer = (state, action) => {
         loading: false,
         userAuth: null,
       };
+    // Profile
     case FETCH_PROFILE_SUCCESS:
       return {
         ...state,
@@ -111,12 +129,14 @@ const AuthContextProvider = ({ children }) => {
         formData,
         config
       );
+
       if (res?.data?.status === "success") {
         dispatch({
           type: REGISTER_SUCCESS,
           payload: res.data,
         });
       }
+      console.log(res);
       //Redirect
       window.location.href = "/login";
     } catch (error) {

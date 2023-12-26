@@ -28,6 +28,7 @@ export default function AccountDetails() {
       return acc;
     }
   }, 0);
+
   return (
     <>
       {account?.transactions?.length <= 0 ? (
@@ -52,7 +53,7 @@ export default function AccountDetails() {
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="mx-auto max-w-4xl text-center">
                 <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                  {account?.title}
+                  {account?.name}
                 </h2>
                 <p className="mt-3 text-xl text-gray-500 sm:mt-4">
                   Lorem ipsum dolor, sit amet consectetur adipisicing elit.
