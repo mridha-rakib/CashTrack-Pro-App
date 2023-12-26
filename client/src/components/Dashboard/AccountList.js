@@ -56,13 +56,12 @@ const AccountList = ({ accounts }) => {
                   </Link>
                 </div>
                 {accounts?.map((acc) => {
-                  console.log(acc);
                   return (
                     <a className="group block mb-6" href="#">
                       <div className="flex items-center justify-between flex-wrap p-10 bg-coolGray-50 group-hover:bg-coolGray-100 rounded-md shadow-md transition duration-200">
                         <div className="w-full md:w-1/2 mb-2 md:mb-0">
                           <h3 className="text-lg md:text-xl text-coolGray-800 group-hover:text-coolGray-900 font-semibold">
-                            {acc?.name}
+                            {acc?.title}
                           </h3>
                         </div>
                         <Link to={`/account-details/${acc?._id}`}>

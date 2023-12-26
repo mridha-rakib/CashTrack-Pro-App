@@ -18,12 +18,12 @@ const AccountDashboard = () => {
           role="alert"
         >
           <strong className="font-bold">Error!</strong>
-          <span className="block sm:inline">Error here</span>
+          <span className="block sm:inline">{error}</span>
         </div>
       ) : (
         <>
           <AccountSummary />
-          <AccountList accounts={profile?.user?.accounts} />
+          <AccountList accounts={profile?.accounts} />
         </>
       )}
     </>

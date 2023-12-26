@@ -5,8 +5,11 @@ import {
   LOGIN_FAILED,
   FETCH_PROFILE_SUCCESS,
   FETCH_PROFILE_FAIL,
+  LOGOUT,
+  REGISTER_SUCCESS,
+  REGISTER_FAIL,
 } from "./authActionTypes";
-import { API_URL_USER } from "../../utils/apiURL";
+import { API_URL_USER } from "../../../utils/apiURL";
 // auth context
 export const authContext = createContext();
 
@@ -51,6 +54,16 @@ const reducer = (state, action) => {
         error: payload,
         profile: null,
       };
+    // logout
+    case LOGOUT:
+      //remove from storage
+      localStorage.removeItem("userAuth");
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        userAuth: null,
+      };
     default:
       return state;
   }
@@ -69,13 +82,14 @@ const AuthContextProvider = ({ children }) => {
     };
     try {
       const res = await axios.post(`${API_URL_USER}/login`, formData, config);
+
       if (res?.data?.status === "success") {
         dispatch({
           type: LOGIN_SUCCESS,
           payload: res.data,
         });
+        window.location.href = "/dashboard";
       }
-      console.log(res);
     } catch (error) {
       dispatch({
         type: LOGIN_FAILED,
@@ -84,10 +98,37 @@ const AuthContextProvider = ({ children }) => {
     }
   };
 
+  //Register action
+  const registerUserAction = async (formData) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      const res = await axios.post(
+        `${API_URL_USER}/register`,
+        formData,
+        config
+      );
+      if (res?.data?.status === "success") {
+        dispatch({
+          type: REGISTER_SUCCESS,
+          payload: res.data,
+        });
+      }
+      //Redirect
+      window.location.href = "/login";
+    } catch (error) {
+      dispatch({
+        type: REGISTER_FAIL,
+        payload: error?.response?.data?.message,
+      });
+    }
+  };
+
   // profile action
   const fetchProfileAction = async () => {
-    //
-
     try {
       const config = {
         headers: {
@@ -111,14 +152,27 @@ const AuthContextProvider = ({ children }) => {
       });
     }
   };
+
+  //Logout
+  const logoutUserAction = () => {
+    dispatch({
+      type: LOGOUT,
+      payload: null,
+    });
+    //Redirect
+    window.location.href = "/login";
+  };
   return (
     <authContext.Provider
       value={{
         loginUserAction,
         userAuth: state,
+        token: state?.userAuth?.token,
         fetchProfileAction,
         profile: state?.profile,
         error: state?.error,
+        logoutUserAction,
+        registerUserAction,
       }}
     >
       {children}

@@ -1,7 +1,7 @@
-import { createContext, useReducer } from "react";
 import axios from "axios";
-
+import { createContext, useReducer } from "react";
 import { API_URL_ACC } from "../../../utils/apiURL";
+import { API_URL_USER } from "../../../utils/apiURL";
 import {
   ACCOUNT_DETAILS_SUCCESS,
   ACCOUNT_DETAILS_FAIL,
@@ -10,8 +10,8 @@ import {
 } from "./accountActionTypes";
 
 export const accountContext = createContext();
-//Initial State
 
+//Initial State
 const INITIAL_STATE = {
   userAuth: JSON.parse(localStorage.getItem("userAuth")),
   account: null,
@@ -23,6 +23,7 @@ const INITIAL_STATE = {
 //reducer
 const accountReducer = (state, action) => {
   const { type, payload } = action;
+
   switch (type) {
     // Details
     case ACCOUNT_DETAILS_SUCCESS:
@@ -62,13 +63,13 @@ const accountReducer = (state, action) => {
 //Provider
 export const AccountContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(accountReducer, INITIAL_STATE);
-  console.log(state);
+
   //Get account Details action
   const getAccountDetailsAction = async (id) => {
     const config = {
       headers: {
-        Authorization: `Bearer ${state?.userauth?.token}`,
         "Content-Type": "application/json",
+        Authorization: `Bearer ${state?.userAuth?.token}`,
       },
     };
     try {
@@ -90,37 +91,36 @@ export const AccountContextProvider = ({ children }) => {
   };
 
   //Get account Details action
-  const createAccountAction = async (formData) => {
-    console.log(state?.userAuth);
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${state?.userAuth?.token}`,
-      },
-    };
-    try {
-      const res = await axios.post(`${API_URL_ACC}`, formData, config);
-      if (res?.data?.status === "success") {
-        //dispatch
-        dispatch({
-          type: ACCOUNT_CREATION_SUCCESS,
-          payload: res?.data?.data,
-        });
-      }
-    } catch (error) {
-      console.log(error);
-      dispatch({
-        type: ACCOUNT_CREATION_FAIL,
-        payload: error?.data?.response?.message,
-      });
-    }
-  };
+  // const createAccountAction = async (formData) => {
+  //   console.log(state?.userAuth);
+  //   const config = {
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${state?.userAuth?.token}`,
+  //     },
+  //   };
+  //   try {
+  //     const res = await axios.post(`${API_URL_ACC}`, formData, config);
+  //     if (res?.data?.status === "success") {
+  //       //dispatch
+  //       dispatch({
+  //         type: ACCOUNT_CREATION_SUCCESS,
+  //         payload: res?.data?.data,
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     dispatch({
+  //       type: ACCOUNT_CREATION_FAIL,
+  //       payload: error?.data?.response?.message,
+  //     });
+  //   }
+  // };
   return (
     <accountContext.Provider
       value={{
         getAccountDetailsAction,
         account: state?.account,
-        createAccountAction,
         error: state?.error,
       }}
     >
